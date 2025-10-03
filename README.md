@@ -1,1 +1,1 @@
-# TOP-TTT
+This is a Tic Tac Toe game for The Odin Project to demonstrate my understanding of scope, closures, and modules.
