@@ -4,7 +4,14 @@ const Player = function(name, marker){
     let score = 0;
 
     const move = function(position) {
-        gameBoard().Board[position] = marker;
+        if(gameBoard().Board[position] == undefined)
+        {
+            gameBoard().Board[position] = marker;
+        }
+        else
+        {
+            console.log("Square already taken");
+        }
         console.log(gameBoard().Board)
     };
 
@@ -12,12 +19,16 @@ const Player = function(name, marker){
         name,
         marker,
         move,
-
+        score,
     }
 };
 
+let player1 = Player('Player1', 'X');
+
+let player2 = Player('Player2', 'O');
+
 const gameBoard = function(){
-    let Board = game.Board;
+    let Board = Array.from(DOMmanager.BoardArray).map(item => item.textContent);
     let BoardObj = {
     line1 : [Board[0], Board[1], Board[2]],
     line2 : [Board[3], Board[4], Board[5]],
@@ -30,12 +41,27 @@ const gameBoard = function(){
     };
 
     const checkWin = function(){
+        UpdateBoard();
         Object.keys(BoardObj).forEach(obj =>{
-            if(BoardObj[obj][0] == BoardObj[obj][1] && BoardObj[obj][1] == BoardObj[obj][2] && BoardObj[obj][0] != undefined)
+            if(BoardObj[obj][0] == BoardObj[obj][1] && BoardObj[obj][1] == BoardObj[obj][2] && BoardObj[obj][0] != '')
             {
                 return console.log('You win!');
             }
         })
+    }
+
+    const UpdateBoard = function(){
+        Board = Array.from(DOMmanager.BoardArray).map(item => item.textContent);
+        BoardObj = {
+        line1 : [Board[0], Board[1], Board[2]],
+        line2 : [Board[3], Board[4], Board[5]],
+        line3 : [Board[6], Board[7], Board[8]],
+        column1 : [Board[0], Board[3], Board[6]],
+        column2 : [Board[1], Board[4], Board[7]],
+        column3 : [Board[2], Board[5], Board[8]],
+        diagonal1 : [Board[0], Board[4], Board[8]],
+        diagonal2 : [Board[6], Board[4], Board[2]],
+        };
     }
 
     return{
@@ -46,18 +72,32 @@ const gameBoard = function(){
 };
 
 const game = (function(){
-    let Players = [];
     let Board = new Array(9);
 
-    const startGame = () => Players.forEach((P) => {
+    const startGame = (function(){
         Board = new Array(9);
-        P.score = 0;
-        console.log(`${P} score : 0`);
+        console.log(`Welcome ${player1.name} and ${player2.name}`)
+        console.log(`${player1.name} score: ${player1.score}, ${player2.name} score: ${player2.score}`)
     });
 
-    return {Players, startGame, Board};
+    startGame();
+
+    return {startGame, Board};
 })();
 
-const player1 = Player('Bob', 'X');
+const DOMmanager = (function(doc){
+    let screenBoard = doc.querySelectorAll('td');
+    let BoardArray = Array.from(screenBoard);
+    let playerTrun = (!player1) ? player1: player2;
 
-const player2 = Player('Phil', 'O');
+    screenBoard.forEach(i => i.addEventListener('click', function(){i.innerHTML = playerTrun.marker;
+        gameBoard().checkWin();
+        screenBoard = doc.querySelectorAll('td');
+        BoardArray = Array.from(screenBoard);
+    }))
+
+    return {
+        screenBoard,
+        BoardArray,
+    }
+})(document || documentMock);
