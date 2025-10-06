@@ -10,14 +10,17 @@ const Player = function(name, marker){
     }
 };
 
-let player1 = Player('Player1', 'X');
+let player1 = Player('Frank', 'X');
 
-let player2 = Player('Player2', 'O');
+let player2 = Player('Bill', 'O');
 
 const DOMmanager = (function(){
     let screenBoard = document.querySelectorAll('td');
     let Board = Array.from(screenBoard).map(item => item.innerHTML);
     const body = document.querySelector('html');
+
+    const player1Display = document.querySelector('#player1');
+    const player2Display = document.querySelector('#player2');
 
     const turnReader = document.querySelector('#turn');
 
@@ -42,8 +45,16 @@ const DOMmanager = (function(){
     }
 
     const turnUpdate = function(player){
-        turnReader.innerHTML = player.name;
+        turnReader.innerHTML = "Turn: " + player.name + ` (${player.marker})`;
     }
+
+    const updatePlayerDisplay = function(){
+        player1Display.children[0].textContent = "Player 1: " + player1.name;
+        player1Display.children[1].textContent = "Score: " + player1.score;
+
+        player2Display.children[0].textContent = "Player 2: " + player2.name;
+        player2Display.children[1].textContent = "Score: " + player2.score;
+    };
     
     return{
         screenBoard,
@@ -51,7 +62,7 @@ const DOMmanager = (function(){
         BoardObj,
         turnUpdate,
         win,
-        body
+        updatePlayerDisplay,
     }
 });
 
@@ -75,6 +86,7 @@ const game = (function(){
     }))
 
     const startGame = function(){
+        DOMmanager().updatePlayerDisplay();
         turn1 = true;
         gameWon = false;
         playerTurn = (turn1) ? player1: player2;
@@ -104,6 +116,8 @@ const game = (function(){
     };
 
     startGame();
+
+    DOMmanager().updatePlayerDisplay();
 
     console.log(`Welcome ${player1.name} and ${player2.name}`);
 

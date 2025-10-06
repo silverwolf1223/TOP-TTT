@@ -7,27 +7,37 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="body">
-    <h1>Tic Tac Toe</h1>
+    <div class="player" id="player1">
+        <div>Player 1: </div>
+        <div>Score: </div>
+    </div>
+    <div id="game">
+        <h1>Tic Tac Toe</h1>
 
-    <table cellspacing="0">
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-    <div id="turn"></div>
-    <button onclick="game.startGame()">Reset</button>
+        <table cellspacing="0">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <div id="turn"></div>
+        <button onclick="game.startGame()">Reset</button>
+    </div>
+    <div class="player" id="player2">
+        <div>Player 2: </div>
+        <div>Score: </div>
+    </div>
 
     <script src="newScript.js"></script>
 </body>
