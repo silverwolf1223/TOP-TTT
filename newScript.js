@@ -10,9 +10,9 @@ const Player = function(name, marker){
     }
 };
 
-let player1 = Player('Frank', 'X');
+let player1 = Player('Joe', 'X');
 
-let player2 = Player('Bill', 'O');
+let player2 = Player('Bob', 'O');
 
 const DOMmanager = (function(){
     let screenBoard = document.querySelectorAll('td');
@@ -23,6 +23,7 @@ const DOMmanager = (function(){
     const player2Display = document.querySelector('#player2');
 
     const turnReader = document.querySelector('#turn');
+    const marker = document.querySelector('#marker');
 
     let BoardObj = {
         line1 : [Board[0], Board[1], Board[2]],
@@ -40,12 +41,15 @@ const DOMmanager = (function(){
         body.removeEventListener('click', click, {capture: true})
     }
 
-    const win = function(){
+    const win = function(player){
         body.addEventListener('click', click, {capture: true})
+        screenBoard.forEach(i => i.style.pointerEvents = "none")
+        turnReader.innerHTML = player.name + " WINS!";
     }
 
     const turnUpdate = function(player){
-        turnReader.innerHTML = "Turn: " + player.name + ` (${player.marker})`;
+        turnReader.innerHTML = "Turn: " + player.name;
+        marker.innerHTML = player.marker;
     }
 
     const updatePlayerDisplay = function(){
@@ -74,34 +78,36 @@ const game = (function(){
     let playerTurn = (turn1) ? player1: player2;
     let gameWon = false;
 
-    DOMmanager().screenBoard.forEach(i => i.addEventListener('click', function(){
-        if(i.textContent == '')
+
+    function tileManager(){
+        if(this.textContent == '' && !gameWon)
         {
-            i.innerHTML = playerTurn.marker;
+            this.innerHTML = playerTurn.marker;
             checkWin();
+            if(gameWon) return;
             turn1 = !turn1;
             playerTurn = (turn1) ? player1 : player2;
             DOMmanager().turnUpdate(playerTurn);
         }
-    }))
+    }
 
     const startGame = function(){
-        DOMmanager().updatePlayerDisplay();
         turn1 = true;
         gameWon = false;
         playerTurn = (turn1) ? player1: player2;
+        gameBoard = DOMmanager().BoardObj;
+
+        DOMmanager().updatePlayerDisplay();
         DOMmanager().turnUpdate(playerTurn);
         Array.from(DOMmanager().screenBoard).map(item => item.textContent = '');
-        DOMmanager();
-        gameBoard = DOMmanager().BoardObj;
-        console.log(`${player1.name} score: ${player1.score}, ${player2.name} score: ${player2.score}`);
+        DOMmanager().screenBoard.forEach(i => i.style.pointerEvents = "auto");
     }
 
     const win = function()
     {
         gameWon = true;
         playerTurn.score += 1;
-        DOMmanager().win();
+        DOMmanager().win(playerTurn);
     };
 
     const checkWin = function(){
@@ -115,17 +121,25 @@ const game = (function(){
         })
     };
 
+    const reset = function(){
+        player1.score = 0;
+        player2.score = 0;
+        startGame();
+    };
+
     startGame();
 
     DOMmanager().updatePlayerDisplay();
 
-    console.log(`Welcome ${player1.name} and ${player2.name}`);
+    DOMmanager().screenBoard.forEach(i => i.addEventListener('click', tileManager));
 
     return{
         startGame,
+        reset,
         checkWin,
         playerTurn,
         gameWon,
+        tileManager,
     }
 
 })();

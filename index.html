@@ -7,10 +7,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="body">
-    <div class="player" id="player1">
-        <div>Player 1: </div>
-        <div>Score: </div>
+    <div class="player">
+        <div id="player1">
+            <div>Player 1: </div>
+            <div>Score: </div>
+        </div>
+        <div id="player2">
+            <div>Player 2: </div>
+            <div>Score: </div>
+        </div>
     </div>
+    <div id="marker">X</div>
     <div id="game">
         <h1>Tic Tac Toe</h1>
 
@@ -32,11 +39,7 @@
             </tr>
         </table>
         <div id="turn"></div>
-        <button onclick="game.startGame()">Reset</button>
-    </div>
-    <div class="player" id="player2">
-        <div>Player 2: </div>
-        <div>Score: </div>
+        <button onclick="game.reset()" id="reset">Reset</button>
     </div>
 
     <script src="newScript.js"></script>
