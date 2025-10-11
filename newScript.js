@@ -129,8 +129,6 @@ const game = (function(){
 
     startGame();
 
-    DOMmanager().updatePlayerDisplay();
-
     DOMmanager().screenBoard.forEach(i => i.addEventListener('click', tileManager));
 
     return{
